@@ -1,5 +1,7 @@
-int redLED = 5;
-int greenLED = 6;
+int redLED = 11;
+int greenLED = 8;
+int blueLED_1 = 10;
+int blueLED_2 = 9;
 int onOffButton = 2;
 int heatButton = 4;
 int coolButton = 3;
@@ -12,6 +14,8 @@ void setup() {
   // put your setup code here, to run once:
   pinMode(redLED, OUTPUT);
   pinMode(greenLED, OUTPUT);
+  pinMode(blueLED_1, OUTPUT);
+  pinMode(blueLED_2, OUTPUT);
   pinMode(onOffButton, OUTPUT);
   pinMode(heatButton, OUTPUT);
   pinMode(coolButton, OUTPUT);
@@ -29,7 +33,8 @@ void loop() {
     blinkLED(greenLED, 5);  
     on = true;
     delay(1000);
-  } else if (onOffButtonPressed && on){
+  } 
+  else if (onOffButtonPressed && on){
     Serial.println("Turning off device!");
     blinkLED(redLED, 5);
     on = false;
@@ -38,7 +43,11 @@ void loop() {
 
   bool heatButtonPressed = digitalRead(heatButton);
   if (heatButtonPressed && on){
-   heat = true;  
+    heat = true;
+    for (int i=0; i<4; i++) {
+      blinkLED(blueLED_1, 1);
+      blinkLED(blueLED_2, 1);
+    } 
   }
   Serial.println("State of heat button: ");
   Serial.println(heatButtonPressed);
@@ -46,9 +55,13 @@ void loop() {
   bool coolButtonPressed = digitalRead(coolButton);
   if (coolButtonPressed && on){
     heat = false;
+    for (int i=0; i<2; i++) {
+      blinkLED(blueLED_2, 1);
+      blinkLED(blueLED_1, 1);
+    }
   }
-  //Serial.println("State of cool button: ");
-  //Serial.println(coolButtonPressed);
+  Serial.println("State of cool button: ");
+  Serial.println(coolButtonPressed);
 
   //bool stationaryDetected = detectStationary();
   if (heat && on){ //&& stationaryDetected
